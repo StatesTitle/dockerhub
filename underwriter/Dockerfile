@@ -1,4 +1,4 @@
-FROM circleci/python:3.6.1
+FROM heroku/heroku:16
 
-RUN sudo apt-get update -y
-RUN sudo apt-get install -y libreoffice
+RUN apt-get update -y
+RUN apt-get install -y libreoffice

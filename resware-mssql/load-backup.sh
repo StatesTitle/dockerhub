@@ -15,7 +15,7 @@ if [ -z "${FORCE_BACK_UP_LOAD+N}" ] || [ "${FORCE_BACK_UP_LOAD}" = "N" ]; then
     # Only attempt to load backup file if different than historical file and database 
     if [ "$CURRENT_BACKUP_FILE_NAME" = "$BACKUP_FILE_NAME" ] && [ "$CURRENT_RESWARE_DATABASE_NAME" = "$RESWARE_DATABASE_NAME" ]; then
         echo "Skipping '$CURRENT_BACKUP_FILE_NAME' and '$CURRENT_RESWARE_DATABASE_NAME' already loaded..." 
-        return 1
+        return 0
     fi
 fi
 

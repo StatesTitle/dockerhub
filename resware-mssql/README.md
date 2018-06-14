@@ -16,7 +16,7 @@ This image is used to restore a zipped backup ResWare database.
 
 ### Optional Environment Variables
 - `FORCE_BACK_UP_LOAD`
-
+- `RUN_LOAD_BACKUP`
 
 ### Example Docker commands
 
@@ -32,8 +32,14 @@ This image is used to restore a zipped backup ResWare database.
   docker run -e ACCEPT_EULA=Y -e MSSQL_PID=Enterprise -e SA_PASSWORD=someGoodPass! -d -p 1433:1433 <image>
   ```
 
+1. Optionally load backup as part of container start-up
+
+  ```
+  docker run -e ACCEPT_EULA=Y -e MSSQL_PID=Enterprise -e SA_PASSWORD=someGoodPass! -e RUN_LOAD_BACKUP=Y -e RESWARE_DATABASE_NAME=ResWare -e BACKUP_ZIP_NAME=backup.zip -e BACKUP_FILE_NAME=backup.bak -e S3_BUCKET_NAME=data-dir -e AWS_ACCESS_KEY_ID=<Access Key ID> -e AWS_SECRET_ACCESS_KEY=<Secret Access Key> -e FORCE_BACK_UP_LOAD=N -d -p 1433:1433 <image>
+  ```
+
 1. Attach to container and complete configuration and restoration of ResWare Database
 
   ```
-  docker exec -e ACCEPT_EULA=Y -e MSSQL_PID=Enterprise -e SA_PASSWORD=someGoodPass! -e RESWARE_DATABASE_NAME=ResWare -e BACKUP_ZIP_NAME=backup.zip -e BACKUP_FILE_NAME=backup.bak -e S3_BUCKET_NAME=data-dir -e AWS_ACCESS_KEY_ID=<Access Key ID> -e AWS_SECRET_ACCESS_KEY=<Secret Access Key> -e FORCE_BACK_UP_LOAD=N <container> ./load-backup.sh
+  docker exec -e SA_PASSWORD=someGoodPass! -e RESWARE_DATABASE_NAME=ResWare -e BACKUP_ZIP_NAME=backup.zip -e BACKUP_FILE_NAME=backup.bak -e S3_BUCKET_NAME=data-dir -e AWS_ACCESS_KEY_ID=<Access Key ID> -e AWS_SECRET_ACCESS_KEY=<Secret Access Key> -e FORCE_BACK_UP_LOAD=N <container> ./load-backup.sh
   ```

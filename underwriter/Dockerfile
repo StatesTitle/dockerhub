@@ -8,7 +8,7 @@ FROM heroku/heroku:16
 ### 1. Underwriter binaries
 
 RUN apt-get update -y
-RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-essential
+RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-essential libpq-dev
 RUN add-apt-repository --yes ppa:libreoffice/libreoffice-5-4
 RUN apt-get update -y
 RUN apt-get install -y wget libgl1-mesa-glx libreoffice-writer libtiff-tools libxdamage1 libxfixes3

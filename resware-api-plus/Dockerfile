@@ -1,1 +1,1 @@
-FROM circleci/python:3.7.0
+FROM golang:1.8.0

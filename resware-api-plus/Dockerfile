@@ -1,3 +1,3 @@
-FROM circleci/python:3.7.0-stretch-browsers
+FROM circleci/python:3.7.0
 
-RUN apt-get update -y
+RUN curl https://cli-assets.heroku.com/install.sh | sh

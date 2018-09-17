@@ -12,6 +12,7 @@ RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-es
 RUN add-apt-repository --yes ppa:libreoffice/libreoffice-5-4
 RUN apt-get update -y
 RUN apt-get install -y wget libgl1-mesa-glx libreoffice-writer libtiff-tools libxdamage1 libxfixes3
+RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 
 ### 2. Python

@@ -3,7 +3,7 @@ FROM heroku/heroku:16
 ## This file is broken into sections.
 ## 1. Installation of binaries needed by the underwriter
 ## 2. Python setup from https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile
-## 3. Standard circleci setup from https://github.com/circleci/circleci-images/blob/master/shared/images/Dockerfile-basic.template
+## 3. Standard circleci setup from https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile
 
 ### 1. Underwriter binaries
 
@@ -99,10 +99,7 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 ### 3. CircleCI
-### The following is copied from: https://github.com/circleci/circleci-images/blob/master/shared/images/Dockerfile-basic.template
-
-
-
+### The following is copied from: https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile
 # make Apt non-interactive
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \
   && echo 'DPkg::Options "--force-confnew";' >> /etc/apt/apt.conf.d/90circleci
@@ -173,5 +170,11 @@ RUN groupadd --gid 3434 circleci \
   && useradd --uid 3434 --gid circleci --shell /bin/bash --create-home circleci \
   && echo 'circleci ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-circleci \
   && echo 'Defaults    env_keep += "DEBIAN_FRONTEND"' >> /etc/sudoers.d/env_keep
+
+# BEGIN IMAGE CUSTOMIZATIONS
+
+# Install pipenv
+RUN sudo pip install pipenv
+# END IMAGE CUSTOMIZATIONS
 
 USER circleci

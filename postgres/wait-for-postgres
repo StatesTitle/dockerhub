@@ -12,3 +12,4 @@ done
 
 set -e
 psql -U postgres -c 'select 1;'
+

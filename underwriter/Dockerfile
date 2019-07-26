@@ -162,6 +162,9 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
+### 3a. Hasura CLI
+RUN curl -L https://github.com/hasura/graphql-engine/raw/master/cli/get.sh | bash
+
 ### 4. CircleCI
 ### The following is copied from: https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile
 # make Apt non-interactive

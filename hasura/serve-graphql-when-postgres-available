@@ -1,0 +1,27 @@
+#!/bin/sh
+# This is based on https://github.com/hasura/graphql-engine/blob/8282e92408d4dc6a124a993d25c0551ee896b5cd/scripts/cli-migrations/docker-entrypoint.sh#L25
+
+set -e
+
+wait_for_postgres() {
+    if test -z "$POSTGRES_HOSTNAME"; then
+        POSTGRES_HOSTNAME="localhost"
+    fi
+
+    if test -z "$POSTGRES_PORT"; then
+        POSTGRES_PORT="5432"
+    fi
+
+    local TIMEOUT=120
+    
+    echo "waiting up to $TIMEOUT seconds for postgres to be ready"
+    for i in `seq 1 $TIMEOUT`;
+    do
+        nc -z "$POSTGRES_HOSTNAME" $POSTGRES_PORT > /dev/null 2>&1 && echo "postgres is ready" && sleep 3 && return
+        sleep 1
+    done
+    echo "failed waiting for postgres" && exit 1
+}
+
+wait_for_postgres
+graphql-engine serve

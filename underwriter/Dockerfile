@@ -164,6 +164,7 @@ RUN set -ex \
 
 ### 3a. Hasura CLI
 RUN curl -L https://github.com/hasura/graphql-engine/raw/master/cli/get.sh | bash
+  && hasura version
 
 ### 4. CircleCI
 ### The following is copied from: https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile

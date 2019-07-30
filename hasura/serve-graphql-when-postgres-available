@@ -9,7 +9,7 @@ wait_for_postgres() {
     echo "waiting up to $TIMEOUT seconds for postgres to be ready"
     for i in `seq 1 $TIMEOUT`;
     do
-        nc localhost 5432 > /dev/null 2>&1 && echo "postgres is ready" && return
+        nc localhost 5432 > /dev/null 2>&1 && echo "postgres is ready" && sleep 3 && return
         sleep 1
     done
     echo "failed waiting for postgres" && exit 1

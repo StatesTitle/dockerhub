@@ -3,7 +3,7 @@ FROM heroku/heroku:16
 ## This file is broken into sections.
 ## 1. Installation of binaries needed by the underwriter
 ## 2. Python setup from https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile
-## 3. Node and Yarn from https://github.com/nodejs/docker-node/blob/master/10/jessie-slim/Dockerfile
+## 3. Node and Yarn from https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
 ## 4. Standard circleci setup from https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile
 
 ### 1. Underwriter binaries
@@ -99,9 +99,9 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-### 3. Node 10.16.0 + Yarn 1.16.0
-### https://github.com/nodejs/docker-node/blob/master/10/jessie-slim/Dockerfile
-ENV NODE_VERSION 10.16.0
+### 3. Node 12.10.0 + Yarn 1.17.3
+### https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
+ENV NODE_VERSION 12.10.0
 
 RUN buildDeps='xz-utils' \
     && ARCH= && dpkgArch="$(dpkg --print-architecture)" \
@@ -143,7 +143,7 @@ RUN buildDeps='xz-utils' \
     && apt-get purge -y --auto-remove $buildDeps \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-ENV YARN_VERSION 1.16.0
+ENV YARN_VERSION 1.17.3
 
 RUN set -ex \
   && for key in \
@@ -161,6 +161,7 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
+
 
 ### 3a. Hasura CLI
 RUN curl -L https://github.com/hasura/graphql-engine/raw/master/cli/get.sh | bash \

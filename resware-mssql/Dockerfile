@@ -1,16 +1,17 @@
 FROM microsoft/mssql-server-linux:2017-latest
 
-ENV DOCKERIZE_VERSION v0.6.1
+# -y is not sufficient for upgrading SQL server
+ENV ACCEPT_EULA Y
 
 RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get dist-upgrade -y && \
-    apt-get -y autoremove && \
-    apt-get clean && \
-    apt-get install -y wget && \
-    apt-get install zip -y -V && \
-    apt-get install build-essential -y && \
-    pip install awscli
+	apt-get dist-upgrade -y && \
+	apt-get -y autoremove && \
+	apt-get clean && \
+	apt-get install -y wget && \
+	apt-get install zip -y -V && \
+	apt-get install build-essential -y && \
+	apt-get install libssl-dev -y && \
+	apt-get install libffi-dev
 
 ### 2. Python
 ### The following is copied from: https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile
@@ -94,6 +95,10 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
+
+RUN pip install awscli
+
+ENV DOCKERIZE_VERSION v0.6.1
 
 # Install Docker
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/mssql/server:2017-CU17-ubuntu
+FROM mcr.microsoft.com/mssql/server:2017-CU18-ubuntu-16.04
 
 # -y is not sufficient for upgrading SQL server
 ENV ACCEPT_EULA Y

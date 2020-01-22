@@ -246,4 +246,7 @@ RUN groupadd --gid 3434 circleci \
 RUN sudo pip install pipenv
 # END IMAGE CUSTOMIZATIONS
 
+# Install thrift
+RUN apt-get install -y thrift-compiler
+
 USER circleci

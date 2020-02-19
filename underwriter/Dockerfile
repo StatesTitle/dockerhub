@@ -254,9 +254,10 @@ RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-
     && tar xfz thrift.tgz \
     && cd thrift-0.13.0 \
     && ./bootstrap.sh \
-    && ./configure --prefix=/usr/local/ --without-as3 --without-cpp --without-qt5 --without-c_glib --without-csharp --without-java  --without-erlang --without-nodejs --without-nodets --without-lua --without-python --without-perl --without-php --without-php_extension  --without-dart --without-ruby --without-haskell --without-go --without-swift --without-rs --without-cl --without-haxe --without-dotnetcore --without-d \
+    && ./configure --prefix=/usr/local/ --enable-libs=no \
     && make \
     && make install \
-    && apt-get purge -y --auto-remove $buildDeps
+    && apt-get purge -y --auto-remove $buildDeps \
+    && rm -rf /thrift-build/
 
 USER circleci

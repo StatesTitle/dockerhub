@@ -244,7 +244,20 @@ RUN groupadd --gid 3434 circleci \
 RUN sudo pip install pipenv
 # END IMAGE CUSTOMIZATIONS
 
-# Install thrift
-RUN apt-get install -y thrift-compiler
+# Install thrift 0.13.0
+RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
+    && set -ex \
+    && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir /thrift-build/ && cd /thrift-build/ \
+    && curl -fsSL --compressed "https://codeload.github.com/apache/thrift/tar.gz/v0.13.0" -o thrift.tgz \
+    && tar xfz thrift.tgz \
+    && cd thrift-0.13.0 \
+    && ./bootstrap.sh \
+    && ./configure --prefix=/usr/local/ --enable-libs=no \
+    && make \
+    && make install \
+    && apt-get purge -y --auto-remove $buildDeps \
+    && rm -rf /thrift-build/
 
 USER circleci

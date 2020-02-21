@@ -19,4 +19,8 @@ RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs \
     && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
     && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg
 
+#G++ and unixodbc-dev are needed for pyodbc
+RUN apt-get install -y g++
+RUN apt-get install -y unixodbc-dev
+
 USER circleci

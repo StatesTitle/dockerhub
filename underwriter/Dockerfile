@@ -17,6 +17,7 @@ RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 # unixodbc-dev is needed for pyodbc
 RUN apt-get install -y unixodbc-dev
+RUN apt-get install -y g++
 
 ### 2. Python
 ### The following is copied from: https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile

@@ -15,6 +15,8 @@ RUN apt-get update -y
 RUN apt-get install -y wget libgl1-mesa-glx libreoffice-writer libtiff-tools libxdamage1 libxfixes3
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
+# unixodbc-dev is needed for pyodbc
+RUN apt-get install -y unixodbc-dev
 
 ### 2. Python
 ### The following is copied from: https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile
@@ -260,8 +262,5 @@ RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -rf /thrift-build/
 
-#G++ and unixodbc-dev are needed for pyodbc
-RUN apt-get install -y g++
-RUN apt-get install -y unixodbc-dev
 
 USER circleci

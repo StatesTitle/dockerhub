@@ -248,7 +248,7 @@ RUN sudo pip install pipenv
 # END IMAGE CUSTOMIZATIONS
 
 # Install thrift 0.13.0
-RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
+RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
     && set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
     && rm -rf /var/lib/apt/lists/* \

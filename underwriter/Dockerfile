@@ -260,4 +260,8 @@ RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -rf /thrift-build/
 
+#G++ and unixodbc-dev are needed for pyodbc
+RUN apt-get install -y g++
+RUN apt-get install -y unixodbc-dev
+
 USER circleci

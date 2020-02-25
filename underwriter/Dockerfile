@@ -15,6 +15,9 @@ RUN apt-get update -y
 RUN apt-get install -y wget libgl1-mesa-glx libreoffice-writer libtiff-tools libxdamage1 libxfixes3
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
+# unixodbc-dev is needed for pyodbc
+RUN apt-get install -y unixodbc-dev
+RUN apt-get install -y g++
 
 ### 2. Python
 ### The following is copied from: https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile
@@ -241,7 +244,7 @@ RUN sudo pip install pipenv
 # END IMAGE CUSTOMIZATIONS
 
 # Install thrift 0.13.0
-RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
+RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
     && set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
     && rm -rf /var/lib/apt/lists/* \
@@ -255,5 +258,6 @@ RUN buildDeps='automake bison flex libtool g++ libboost-dev libboost-filesystem-
     && make install \
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -rf /thrift-build/
+
 
 USER circleci

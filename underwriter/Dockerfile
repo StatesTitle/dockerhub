@@ -9,10 +9,7 @@ FROM heroku/heroku:16
 ### 1. Underwriter binaries
 
 RUN apt-get update -y
-RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-essential
-RUN add-apt-repository --yes ppa:libreoffice/libreoffice-5-4
-RUN apt-get update -y
-RUN apt-get install -y wget libgl1-mesa-glx libreoffice-writer libtiff-tools libxdamage1 libxfixes3
+RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-essential wget
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 # unixodbc-dev is needed for pyodbc

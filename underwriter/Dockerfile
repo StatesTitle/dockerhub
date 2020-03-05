@@ -21,6 +21,7 @@ RUN echo "[FreeTDS]" >> /etc/odbcinst.ini
 RUN echo "Description=FreeTDS Driver" >> /etc/odbcinst.ini
 RUN echo "Driver=usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini
 RUN echo "Setup=usr/lib/x86_64-linux-gnu/odbc/libtdsS.so" >> /etc/odbcinst.ini
+ENV ODBCSYSINI /etc/
 
 ### 2. Python
 ### The following is copied from: https://github.com/docker-library/python/blob/ccfb4c011e1db901c167c8d4c3611263bd68e65c/3.7/stretch/Dockerfile

@@ -19,8 +19,8 @@ RUN curl https://cli-assets.heroku.com/install.sh | sh
 RUN apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin
 RUN echo "[FreeTDS] \
 Description=FreeTDS Driver \
-Driver=usr/lib/libtdsodbc.so \
-Setup=usr/lib/libtdsS.so \
+Driver=usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so \
+Setup=usr/lib/x86_64-linux-gnu/odbc/libtdsS.so \
 " > /etc/odbcinst.ini
 
 ### 2. Python

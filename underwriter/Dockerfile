@@ -13,7 +13,7 @@ RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-es
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 # unixodbc-dev is needed for pyodbc
-RUN apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin
+RUN apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin g++
 RUN echo "[FreeTDS]" >> /etc/odbcinst.ini
 RUN echo "Description=FreeTDS Driver" >> /etc/odbcinst.ini
 RUN echo "Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini

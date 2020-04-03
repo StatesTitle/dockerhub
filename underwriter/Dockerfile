@@ -103,9 +103,9 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-### 3. Node 12.10.0 + Yarn 1.17.3
+### 3. Node 12.16.1 + Yarn 1.22.4
 ### https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
-ENV NODE_VERSION 12.10.0
+ENV NODE_VERSION 12.16.1
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && case "${dpkgArch##*-}" in \
@@ -118,7 +118,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
       *) echo "unsupported architecture"; exit 1 ;; \
     esac \
     && set -ex \
-    && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr --no-install-recommends \
+    && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && for key in \
       94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
@@ -143,11 +143,25 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && grep " node-v$NODE_VERSION-linux-$ARCH.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
     && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
     && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
-    && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+    && apt-mark auto '.*' > /dev/null \
+    && find /usr/local -type f -executable -exec ldd '{}' ';' \
+      | awk '/=>/ { print $(NF-1) }' \
+      | sort -u \
+      | xargs -r dpkg-query --search \
+      | cut -d: -f1 \
+      | sort -u \
+      | xargs -r apt-mark manual \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+    && node --version \
+    && npm --version
 
-ENV YARN_VERSION 1.17.3
+ENV YARN_VERSION 1.22.4
 
 RUN set -ex \
+  && savedAptMark="$(apt-mark showmanual)" \
+  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* \
   && for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
@@ -162,7 +176,18 @@ RUN set -ex \
   && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
-  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
+  && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
+  && apt-mark auto '.*' > /dev/null \
+  && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
+  && find /usr/local -type f -executable -exec ldd '{}' ';' \
+    | awk '/=>/ { print $(NF-1) }' \
+    | sort -u \
+    | xargs -r dpkg-query --search \
+    | cut -d: -f1 \
+    | sort -u \
+    | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && yarn --version
 
 
 ### 4. CircleCI
@@ -245,7 +270,7 @@ RUN sudo pip install pipenv
 # END IMAGE CUSTOMIZATIONS
 
 # Install thrift 0.13.0
-RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config' \
+RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-system-dev libboost-test-dev libssl-dev libevent-dev make pkg-config g++' \
     && set -ex \
     && apt-get update && apt-get install -y --no-install-recommends $buildDeps \
     && rm -rf /var/lib/apt/lists/* \

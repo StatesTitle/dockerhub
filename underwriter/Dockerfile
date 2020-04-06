@@ -285,5 +285,7 @@ RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev 
     && apt-get purge -y --auto-remove $buildDeps \
     && rm -rf /thrift-build/
 
+RUN apt-get install -y g++
+
 
 USER circleci

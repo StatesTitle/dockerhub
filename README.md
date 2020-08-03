@@ -12,6 +12,10 @@ This repo contains images hosted on Docker Hub
 	```
 	 docker build --tag statestitle/<Dockerfile directory> ./<Dockerfile directory>
 	```
+1. Login to docker
+    ```
+	 docker login
+	```
 1. Push initial image
 
 	```

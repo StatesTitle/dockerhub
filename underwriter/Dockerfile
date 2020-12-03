@@ -277,7 +277,8 @@ RUN buildDeps='automake bison flex libtool libboost-dev libboost-filesystem-dev 
     && rm -rf /thrift-build/
 
 # unixodbc-dev is needed for pyodbc
-RUN apt-get update && apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin g++
+# we add a ppa for freetds to get a more up-to-date version than we get from apt-get by default
+RUN add-apt-repository ppa:rs-vilt/freetds && apt-get update && apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin g++
 RUN echo "[FreeTDS]" >> /etc/odbcinst.ini
 RUN echo "Description=FreeTDS Driver" >> /etc/odbcinst.ini
 RUN echo "Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcinst.ini

@@ -10,6 +10,8 @@ FROM heroku/heroku:16
 
 RUN apt-get update -y
 RUN apt-get -y install software-properties-common libffi-dev libssl-dev build-essential wget
+# we add a ppa for freetds to get a more up-to-date version than we get from apt-get by default
+RUN add-apt-repository ppa:rs-vilt/freetds
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
 ### 2. Python

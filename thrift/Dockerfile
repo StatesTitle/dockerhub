@@ -18,4 +18,4 @@ RUN set -x && \
     rm -rf /tmp/thrift-${THRIFT_VERSION} && \
     apt-get purge -y --auto-remove $dependencies
 
-CMD ["sh", "-c", "echo thrift v.${THRIFT_VERSION}"]
+CMD echo "thrift v.$THRIFT_VERSION"

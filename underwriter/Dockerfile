@@ -263,6 +263,7 @@ RUN groupadd --gid 3434 circleci \
 
 # Install pipenv
 RUN sudo pip install pipenv
+RUN sudo pip install nltk && python3 -m nltk.downloader stopwords
 # END IMAGE CUSTOMIZATIONS
 
 # Install thrift 0.13.0

@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine as builder
+FROM golang:1.16-alpine as builder
 
 ENV KUSTOMIZE_VER 4.1.3
 ENV KUBECTL_VER 1.19.9

@@ -19,29 +19,14 @@ RUN git clone --depth 1 https://github.com/instrumenta/kubeval.git /kubeval
 WORKDIR /kubeval
 RUN make build
 
-# Uncomment the following schema segments for offline schemas (NOTE: makes image ~10GB in size)
-# FROM alpine:latest as schemas
-# RUN apk --no-cache add git
-# RUN git clone --depth 1 https://github.com/instrumenta/kubernetes-json-schema.git
-# RUN git clone --depth 1 https://github.com/garethr/openshift-json-schema.git
-
-# FROM schemas as standalone-schemas
-# RUN cd kubernetes-json-schema/master && \
-#     find -maxdepth 1 -type d -not -name "." -not -name "*-standalone*" | xargs rm -rf
-
 # Build the container
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-COPY --from=builder /kubeval/bin/kubeval .
-COPY --from=builder /usr/bin/kustomize .
-COPY --from=builder /usr/bin/kubectl .
-RUN ln -s /kubeval /usr/local/bin/kubeval
-RUN ln -s /kustomize /usr/local/bin/kustomize
-RUN ln -s /kubectl /usr/local/bin/kubectl
+FROM alpine:3.14.0
+RUN apk --no-cache add ca-certificates && \
+  addgroup -S kubetools && adduser -S kubetools -G kubetools
+COPY --from=builder /kubeval/bin/kubeval /usr/bin/kustomize /usr/bin/kubectl ./
+RUN ln -s /kubeval /usr/local/bin/kubeval && \
+  ln -s /kustomize /usr/local/bin/kustomize && \
+  ln -s /kubectl /usr/local/bin/kubectl
 
-# Uncomment for offline schemas
-# COPY --from=standalone-schemas /kubernetes-json-schema /schemas/kubernetes-json-schema/master
-# COPY --from=standalone-schemas /openshift-json-schema /schemas/openshift-json-schema/master
-# ENV KUBEVAL_SCHEMA_LOCATION=file:///schemas
-
+USER kubetools:kubetools
 ENTRYPOINT ["/bin/sh"]

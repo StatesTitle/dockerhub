@@ -5,8 +5,6 @@ set -e
 CURRENT_BACKUP_FILE_NAME=""
 CURRENT_RESWARE_DATABASE_NAME=""
 
-echo "STKNIGHT1-- AWS_KEY_ID is set to $AWS_ACCESS_KEY_ID" 
-
 # Load history file
 if [ -f ./.load-backup.history ]; then
     . ./.load-backup.history

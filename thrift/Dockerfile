@@ -18,7 +18,7 @@ RUN set -x && \
     rm -rf /tmp/thrift-${THRIFT_VERSION} && \
     apt-get purge -y --auto-remove $dependencies
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl gcc libmagic-dev python3-dev
+# curl is needed for Heroku UI log visibility
+RUN apt-get update && apt-get install -y --no-install-recommends curl
 
 CMD echo "thrift v.$THRIFT_VERSION"

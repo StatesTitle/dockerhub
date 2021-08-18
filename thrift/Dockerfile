@@ -19,6 +19,6 @@ RUN set -x && \
     apt-get purge -y --auto-remove $dependencies
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl gcc libmagic-dev
+    apt-get install -y --no-install-recommends curl gcc libmagic-dev python3-dev
 
 CMD echo "thrift v.$THRIFT_VERSION"

@@ -2,8 +2,8 @@
 # https://github.com/nodejs/docker-node/blob/master/12/stretch/Dockerfile
 # https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/node/images/12.10.0-stretch/Dockerfile
 
-FROM circleci/node:12.10.0-stretch AS base
-FROM circleci/python:3.7.0
+FROM cimg/node:12.10.0-stretch AS base
+FROM cimg/python:3.7.0
 
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 

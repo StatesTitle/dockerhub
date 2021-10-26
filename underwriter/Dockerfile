@@ -99,9 +99,9 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-### 3. Node 12.22.6 + Yarn 1.22.15
+### 3. Node 12.22.7 + Yarn 1.22.17
 ### https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
-ENV NODE_VERSION 12.22.6
+ENV NODE_VERSION 12.22.7
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && case "${dpkgArch##*-}" in \
@@ -151,7 +151,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && node --version \
     && npm --version
 
-ENV YARN_VERSION 1.22.15
+ENV YARN_VERSION 1.22.17
 
 RUN set -ex \
   && savedAptMark="$(apt-mark showmanual)" \

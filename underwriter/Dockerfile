@@ -100,8 +100,8 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 ### 3. Node + Yarn
-### https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
-ENV NODE_VERSION 12.22.8
+### https://github.com/nodejs/docker-node/blob/master/16/stretch-slim/Dockerfile
+ENV NODE_VERSION 16.14.0
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && case "${dpkgArch##*-}" in \
@@ -114,6 +114,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
       *) echo "unsupported architecture"; exit 1 ;; \
     esac \
     && set -ex \
+    # libatomic1 for arm
     && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && for key in \
@@ -148,6 +149,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
       | xargs -r apt-mark manual \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+    # smoke tests
     && node --version \
     && npm --version
 
@@ -181,8 +183,8 @@ RUN set -ex \
     | sort -u \
     | xargs -r apt-mark manual \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  # smoke test
   && yarn --version
-
 
 ### 4. CircleCI
 ### The following is copied from: https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.0/Dockerfile

@@ -101,7 +101,7 @@ RUN set -ex; \
 
 ### 3. Node + Yarn
 ### https://github.com/nodejs/docker-node/blob/master/12/stretch-slim/Dockerfile
-ENV NODE_VERSION 12.22.8
+ENV NODE_VERSION 12.22.10
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && case "${dpkgArch##*-}" in \

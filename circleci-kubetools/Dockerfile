@@ -22,6 +22,7 @@ RUN make build
 # Build the container
 FROM alpine:3.14.0
 RUN apk --no-cache add ca-certificates && \
+  apk add git && \
   addgroup -S kubetools && adduser -S kubetools -G kubetools
 COPY --from=builder /kubeval/bin/kubeval /usr/bin/kustomize /usr/bin/kubectl ./
 RUN ln -s /kubeval /usr/local/bin/kubeval && \

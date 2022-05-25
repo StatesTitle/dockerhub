@@ -1,22 +1,47 @@
-# Base consists of the following images:
-# https://github.com/nodejs/docker-node/blob/master/12/stretch/Dockerfile
-# https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/node/images/12.10.0-stretch/Dockerfile
+FROM cimg/python:3.7.13
 
-FROM circleci/node:12.10.0-stretch AS base
-FROM circleci/python:3.7.0
+### 1. Underwriter binaries
 
-RUN curl https://cli-assets.heroku.com/install.sh | sh
+# this image comes with:
+#    build-essential 12.8ubuntu1.1
+#    curl 7.68.0
+#    docker 20.10.12
+#    docker-compose v2.2.3
+#    dockerize v0.6.1
+#    git 2.34.1
+#    jq 1.6
+#    ubuntu 20.04.3 LTS (Focal Fossa)
+#    wget 1.20.3
+RUN sudo apt-get update -y
+RUN sudo apt-get -y install software-properties-common libffi-dev libssl-dev
 
-ENV YARN_VERSION 1.17.3
+### 2. Node + Yarn
+# Copied (and tweaked) from https://github.com/CircleCI-Public/cimg-python/blob/main/3.7/node/Dockerfile
 
-COPY --from=base /usr/local/bin/node /usr/local/bin/node
-COPY --from=base /opt/yarn-v$YARN_VERSION /opt/yarn-v$YARN_VERSION
+# In the public image build, this pulls the latest LTS release from cimg-node
+# but we've pinned the version here to keep this to a known good version and not update to a new major version when LTS changes
+ENV NODE_VERSION 16.15.0
+RUN curl -L -o node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" && \
+	sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
+	rm node.tar.xz && \
+	sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-# Switch to root user to use ln cmd
-USER root
-# Link Binaries
-RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs \
-    && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
-    && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg
+ENV YARN_VERSION 1.22.19
+RUN curl -L -o yarn.tar.gz "https://yarnpkg.com/downloads/${YARN_VERSION}/yarn-v${YARN_VERSION}.tar.gz" && \
+	sudo tar -xzf yarn.tar.gz -C /opt/ && \
+	rm yarn.tar.gz && \
+	sudo ln -s /opt/yarn-v${YARN_VERSION}/bin/yarn /usr/local/bin/yarn && \
+	sudo ln -s /opt/yarn-v${YARN_VERSION}/bin/yarnpkg /usr/local/bin/yarnpkg
 
-USER circleci
+### 3. Thrift
+# This is the 0.13.x compiler
+RUN sudo apt-get install -y thrift-compiler
+
+# unixodbc-dev is needed for pyodbc
+RUN sudo apt-get update \
+    && sudo apt-get install -y unixodbc-dev unixodbc tdsodbc freetds-dev freetds-bin g++
+RUN echo "[FreeTDS]" | sudo tee -a /etc/odbcinst.ini
+RUN echo "Description=FreeTDS Driver" | sudo tee -a /etc/odbcinst.ini
+RUN echo "Driver=/usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" | sudo tee -a /etc/odbcinst.ini
+RUN echo "Setup=/usr/lib/x86_64-linux-gnu/odbc/libtdsS.so" | sudo tee -a /etc/odbcinst.ini
+ENV ODBCSYSINI /etc/

@@ -20,7 +20,7 @@ RUN sudo apt-get -y install software-properties-common libffi-dev libssl-dev
 
 # In the public image build, this pulls the latest LTS release from cimg-node
 # but we've pinned the version here to keep this to a known good version and not update to a new major version when LTS changes
-ENV NODE_VERSION 16.15.1
+ENV NODE_VERSION 16.16.0
 RUN curl -L -o node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" && \
 	sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
 	rm node.tar.xz && \

@@ -47,6 +47,7 @@ RUN echo "Setup=/usr/lib/x86_64-linux-gnu/odbc/libtdsS.so" | sudo tee -a /etc/od
 ENV ODBCSYSINI /etc/
 
 # 4. Install the Azure CLI
+# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # 5. Install Bazel Pre-requisites
@@ -54,6 +55,7 @@ RUN sudo apt-get install --no-install-recommends -y \
   gettext-base clang
 
 # 6. Install the Github CLI
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null

@@ -20,7 +20,7 @@ RUN sudo apt-get -y install software-properties-common libffi-dev libssl-dev
 
 # In the public image build, this pulls the latest LTS release from cimg-node
 # but we've pinned the version here to keep this to a known good version and not update to a new major version when LTS changes
-ENV NODE_VERSION 16.16.0
+ENV NODE_VERSION 20.8.0
 RUN curl -L -o node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" && \
 	sudo tar -xJf node.tar.xz -C /usr/local --strip-components=1 && \
 	rm node.tar.xz && \
@@ -48,7 +48,8 @@ ENV ODBCSYSINI /etc/
 
 # 4. Install the Azure CLI
 # https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# https://aka.ms/InstallAzureCLIDeb redirects to this url, aka.ms has a certificate change this older version of curl doesn't like
+RUN curl -sL https://azurecliprod.blob.core.windows.net/\$root/deb_install.sh | sudo bash
 
 # 5. Install Bazel Pre-requisites
 RUN sudo apt-get install --no-install-recommends -y \

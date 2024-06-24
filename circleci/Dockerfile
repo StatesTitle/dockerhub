@@ -62,3 +62,19 @@ RUN sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 RUN sudo apt update
 RUN sudo apt install gh
+
+# 7. Modern libmagic-dev is needed to correctly identify Word docs in Public API
+ENV LIBMAGIC_VERSION 5.45
+RUN curl -L -O "https://astron.com/pub/file/file-${LIBMAGIC_VERSION}.tar.gz" && \
+	sudo mkdir -p /build/libmagic-dev && \
+	sudo tar -xzf "file-${LIBMAGIC_VERSION}.tar.gz" -C /build/libmagic-dev && \
+	rm "file-${LIBMAGIC_VERSION}.tar.gz" && \
+	cd "/build/libmagic-dev/file-${LIBMAGIC_VERSION}" && \
+	sudo ./configure \
+		--disable-dependency-tracking \
+		--prefix=/usr/local \
+		--enable-fsect-man5 \
+		--enable-static && \
+	sudo make && \
+	sudo make install
+ENV LD_LIBRARY_PATH /usr/local/lib

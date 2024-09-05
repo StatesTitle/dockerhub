@@ -1,12 +1,12 @@
 FROM python:3.11.4-slim
 
-ENV MD5_HASH 38a27d391a2b03214b444cb13d5664f1
+ENV MD5_HASH aadebde599e1f5235acd3c730721b873
 ENV THRIFT_VERSION 0.20.0
 
 RUN set -x && \
-    dependencies='wget automake bison flex g++ git libboost-all-dev libevent-dev libssl-dev libtool make pkg-config' && \
+dependencies='wget automake bison flex g++ git libboost-all-dev libevent-dev libssl-dev libtool make pkg-config' && \
     apt-get update --fix-missing && apt-get install --fix-broken -y --no-install-recommends $dependencies && \
-    wget --output-document /tmp/thrift-${THRIFT_VERSION}.tar.gz https://downloads.apache.org/thrift/${THRIFT_VERSION}/thrift-${THRIFT_VERSION}.tar.gz && \
+    wget --output-document /tmp/thrift-${THRIFT_VERSION}.tar.gz https://archive.apache.org/dist/thrift/${THRIFT_VERSION}/thrift-${THRIFT_VERSION}.tar.gz && \
     [ $(md5sum /tmp/thrift-${THRIFT_VERSION}.tar.gz | cut -d' ' -f1) = $MD5_HASH ] && \
     tar -xf /tmp/thrift-${THRIFT_VERSION}.tar.gz -C /tmp && \
     rm /tmp/thrift-${THRIFT_VERSION}.tar.gz && \

@@ -1,10 +1,4 @@
 FROM mcr.microsoft.com/mssql/server:2017-CU18-ubuntu-16.04
-COPY ZscalerRootCertificate.crt /usr/local/share/ca-certificates/
-
-# Update CA certificates
-RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    update-ca-certificates
 
 # -y is not sufficient for upgrading SQL server
 ENV ACCEPT_EULA Y

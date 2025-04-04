@@ -43,3 +43,19 @@ This image is used to restore a zipped backup ResWare database.
   ```
   docker exec -e SA_PASSWORD=someGoodPass! -e RESWARE_DATABASE_NAME=ResWare -e BACKUP_ZIP_NAME=backup.zip -e BACKUP_FILE_NAME=backup.bak -e S3_BUCKET_NAME=data-dir -e AWS_ACCESS_KEY_ID=<Access Key ID> -e AWS_SECRET_ACCESS_KEY=<Secret Access Key> -e FORCE_BACK_UP_LOAD=N <container> ./load-backup.sh
   ```
+
+### Helpful tips to build docker image locally
+
+#### Avoiding SSL errors due to ZScaler
+Add the following lines to add Zscaler certs 
+
+```
+FROM mcr.microsoft.com/mssql/server:2017-CU18-ubuntu-16.04
+
+COPY ZscalerRootCertificate.crt /usr/local/share/ca-certificates/
+
+# Update CA certificates
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
+```

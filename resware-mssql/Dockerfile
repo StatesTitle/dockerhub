@@ -122,7 +122,7 @@ ENV PYTHON_PIP_VERSION 20.2.4
 RUN wget --no-check-certificate https://bootstrap.pypa.io/get-pip.py -O get-pip.py \
 && python3 get-pip.py \
 && rm get-pip.py
-RUN pip install awscli
+RUN pip install azure-cli
 
 ENV DOCKERIZE_VERSION v0.6.1
 
